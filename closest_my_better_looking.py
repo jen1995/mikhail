@@ -44,6 +44,21 @@ def y7neighbors(y_sorted, idx, min_distance):
     return y_sorted[base: top]
 
 
+def update_min_distance(points, min_distance):
+    y_sorted = sorted(points, key=lambda point: point[1])
+    temp_min_distance = min_distance
+
+    for idx, p in enumerate(y_sorted):
+        temp_min_distance = min(
+            temp_min_distance, 
+            min(
+                [distance(p, neighbor) for neighbor in y7neighbors(y_sorted, idx, min_distance) if neighbor != p], 
+                default=min_distance
+            )
+        )
+    return temp_min_distance
+
+
 def min_distance(points):
     """
     recieve the list of non sorted tuples (x,y)
@@ -83,18 +98,7 @@ def min_distance(points):
         left += 1
 
         if left < right - 1:    # points found
-            y_sorted = sorted(x_sorted[left: right], key=lambda point: point[1])
-            temp_min_distance = min_distance
-
-            for idx, p in enumerate(y_sorted):
-                temp_min_distance = min(
-                    temp_min_distance, 
-                    min(
-                        [distance(p, neighbor) for neighbor in y7neighbors(y_sorted, idx, min_distance) if neighbor != p], 
-                        default=min_distance
-                    )
-                )
-            min_distance = min(min_distance, temp_min_distance)
+            min_distance = min(min_distance, update_min_distance(x_sorted[left: right], min_distance))
 
     # remainder - only for remainig part < 7
     border_point = points_num - points_num % 3
@@ -114,16 +118,7 @@ def min_distance(points):
         if left == right - 1:
             return min_distance    # no points found
 
-        y_sorted = sorted(x_sorted[left: right], key=lambda coord : coord[1])
-        y_sorted_len = len(y_sorted)
-        for i, p in enumerate(y_sorted):        # filter zero  for points self distance
-            min_distance = min(
-                min_distance,
-                min(
-                    [distance(p, neighbor) for neighbor in y7neighbors(y_sorted, i, min_distance) if neighbor != p], 
-                    default=min_distance
-                )  
-            )
+        min_distance = min(min_distance, update_min_distance(x_sorted[left: right], min_distance))
 
     return min_distance
 
