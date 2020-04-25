@@ -22,8 +22,8 @@ def naivemindist(xy):
     return math.sqrt(min_distance)
 
 
-def distance(p1, neighbor): 
-    return math.sqrt((neighbor[0] - p1[0]) ** 2 + (neighbor[1] - p1[1]) ** 2)
+def distance(p1, p2): 
+    return math.sqrt((p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2)
 
 
 def y7neighbors(y_sorted, idx, min_distance):
