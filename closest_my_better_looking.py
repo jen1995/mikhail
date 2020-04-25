@@ -72,11 +72,11 @@ def min_distance(points):
     x_sorted = sorted(points, key=lambda xcoord: xcoord[0])   #  sort by x
 
     # main job - with every 3 points in the list
-    for (p1, neighbor, p3) in zip(x_sorted[0::3], x_sorted[1::3], x_sorted[2::3]):
+    for (p1, p2, p3) in zip(x_sorted[0::3], x_sorted[1::3], x_sorted[2::3]):
         """
         what is happening here?
         """
-        min_distance = min(min_distance, min(map(distance, [p1, p1, neighbor], [neighbor, p3, p3])))
+        min_distance = min(min_distance, min(map(distance, [p1, p1, p2], [p2, p3, p3])))
         if min_distance == 0: 
             return min_distance
 
