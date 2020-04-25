@@ -115,10 +115,8 @@ def min_distance(points):
             left -= 1
         left += 1
 
-        if left == right - 1:
-            return min_distance    # no points found
-
-        min_distance = min(min_distance, update_min_distance(x_sorted[left: right], min_distance))
+        if left < right - 1:
+            min_distance = min(min_distance, update_min_distance(x_sorted[left: right], min_distance))
 
     return min_distance
 
