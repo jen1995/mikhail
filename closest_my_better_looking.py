@@ -74,7 +74,7 @@ def min_distance(points):
     # main job - with every 3 points in the list
     for (p1, p2, p3) in zip(x_sorted[0::3], x_sorted[1::3], x_sorted[2::3]):
         """
-        what is happening here?
+        take every three points and measure distance between them
         """
         min_distance = min(min_distance, min(map(distance, [p1, p1, p2], [p2, p3, p3])))
         if min_distance == 0: 
@@ -83,12 +83,16 @@ def min_distance(points):
     # glue borders
     # starts from the right point on the border - 3 points on the left, two points to the right - 6 overall
     # it must work fast so we assume here that we have 3 points to the left and 2 points to the right. All that remains - do Remainder part
-    for border_point in range(3, points_num - 2):
+    for border_point in range(3, min(points_num - points_num % 3 + 1, points_num)):
 
         # form the list of closest points to border
         right_edge = x_sorted[border_point][0] + min_distance
-        right = border_point + 1
-        while right < border_point + 3 and x_sorted[right][0] < right_edge: 
+        right = border_point + 1 
+
+        if border_point == points_num - points_num % 3:
+            right -= 1
+
+        while right < min(border_point + 3, points_num) and x_sorted[right][0] < right_edge: 
             right += 1
 
         left_edge = x_sorted[border_point][0] - min_distance
@@ -100,31 +104,13 @@ def min_distance(points):
         if left < right - 1:    # points found
             min_distance = min(min_distance, update_min_distance(x_sorted[left: right], min_distance))
 
-    # remainder - only for remainig part < 7
-    border_point = points_num - points_num % 3
-    if border_point < points_num:   # one or none point to the right
-        right_edge = x_sorted[border_point][0] + min_distance
-        right = border_point   # borderpoint - is inclusive index for point not like hi index of list
-
-        while right < points_num and x_sorted[right][0] < right_edge: 
-            right += 1   # it can be points_num for all points included  or points_num-1 if last point is too far
-
-        left_edge = x_sorted[border_point][0] - min_distance
-        left = border_point - 1   # the only border here is min_distance and the first point in x_sorted
-        while left >= 0 and x_sorted[left][0] > left_edge:
-            left -= 1
-        left += 1
-
-        if left < right - 1:
-            min_distance = min(min_distance, update_min_distance(x_sorted[left: right], min_distance))
-
     return min_distance
 
 
 if __name__ == '__main__':
-    n_tests = 500
-    random_range = 100
-    n_points = 50
+    n_tests = 1000
+    random_range = 1000
+    n_points = 500
     for _ in range(n_tests):
         x = random.sample(range(-random_range, random_range), n_points)
         y = random.sample(range(-random_range, random_range), n_points)
