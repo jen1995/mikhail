@@ -29,15 +29,14 @@ def optimal_weight_numpy(capacity, items_list):
 
     for i in range(1, items_num + 1):
         for j in range(1, capacity + 1):
-            prev_table_weight = dp_table[i - 1][j]
             prev_item_weight = items_list[i - 1]
 
             if prev_item_weight > j:
-                dp_table[i][j] = prev_table_weight
+                dp_table[i][j] = dp_table[i - 1][j]
             else:
                 dp_table[i][j] = max(
                     dp_table[i - 1][j - prev_item_weight] + prev_item_weight,
-                    prev_table_weight
+                    dp_table[i - 1][j]
                 )
     return dp_table[-1][-1]
 
