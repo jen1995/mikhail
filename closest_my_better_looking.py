@@ -23,7 +23,7 @@ def naivemindist(xy):
 
 
 def distance(p1, p2): 
-    return math.sqrt((p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2)
+    return (p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2
 
 
 def y7neighbors(y_sorted, idx, min_distance):
@@ -77,8 +77,6 @@ def min_distance(points):
         take every three points and measure distance between them
         """
         min_distance = min(min_distance, min(map(distance, [p1, p1, p2], [p2, p3, p3])))
-        if min_distance == 0: 
-            return min_distance
 
     # glue borders
     # starts from the right point on the border - 3 points on the left, two points to the right - 6 overall
@@ -104,14 +102,14 @@ def min_distance(points):
         if left < right - 1:    # points found
             min_distance = min(min_distance, update_min_distance(x_sorted[left: right], min_distance))
 
-    return min_distance
+    return math.sqrt(min_distance)
 
 
 if __name__ == '__main__':
-    n_tests = 1000
+    n_tests = 100
     random_range = 1000
-    n_points = 500
-    for _ in range(n_tests):
+    n_points = 302
+    for test_no in range(n_tests):
         x = random.sample(range(-random_range, random_range), n_points)
         y = random.sample(range(-random_range, random_range), n_points)
         xy = list(zip(x, y))
@@ -120,7 +118,7 @@ if __name__ == '__main__':
         naive = naivemindist(xy)
         start_time = time()
         my = min_distance(xy)
-        print(f"time in seconds: {time() - start_time} for points number {len(xy)}, my solution = {my}")
+        print(f"test number {test_no}, time in seconds: {time() - start_time} for points number {n_points}, my solution = {my}")
 
         if abs(naive - my) > 1e-10:
             raise("Stress test failed")
