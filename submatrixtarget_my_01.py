@@ -19,7 +19,7 @@ class Solution:
 
         return match_count
 
-#"""  test
+
 matrix = [[0,1,0], [1,1,1], [0,1,0]]    # 4
 target = 0
 start_time = time()
